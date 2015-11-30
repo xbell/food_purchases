@@ -1,0 +1,72 @@
+<div class="tracker">
+  <div class="layer">
+
+    <h1>Food Purchase Tracker</h1>
+
+    <div class="errors">
+      <% if @food %>
+          <% @food.errors.each do |column, error| %>
+            <li><%= column.capitalize %> <%= error %></li>
+          <% end %>
+      <% end %>
+    </div>
+
+    <div class="form">
+      <%= form_tag "/", method: :post do %>
+        <%= text_field_tag :item, "", class: "text_field", placeholder: "Food Item" %>
+        <%= text_field_tag :cost, "", class: "text_field", placeholder: "Food Cost" %>
+        <%= text_field_tag :description, "", class: "text_field", placeholder: "Food Description" %>
+        <%= text_field_tag :vendor, "", class: "text_field", placeholder: "Food Vendor" %>
+        <%= submit_tag "Add Food Purchase" %>
+      <% end %>
+    </div>
+
+    <div class="food_table">
+      <table>
+        <tr>
+          <th>Food Item</th>
+          <th>Cost</th>
+          <th>Description</th>
+          <th>Vendor</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+
+      <% @foods.each do |food| %>
+        <tr>
+          <td><%= food.item %></td>
+          <td><%= number_to_currency(food.cost) %></td>
+          <td><%= food.description %></td>
+          <td><%= food.vendor %></td>
+          <td><%= food.created_at.strftime("%A, %B %e, %Y") %></td>
+          <td><%= link_to "Delete Entry", delete_path(food), class: "link_to_color", method: :get, data: { confirm: "Delete food entry?" } %></td>
+        </tr>
+      <% end %>
+      </table>
+    </div>
+
+    <div class="total_table">
+      <table>
+        <tr>
+          <th>Cost Total</th>
+          <th></th>
+        </tr>
+
+      <% total = 0
+         @foods.each do |food|
+           total += food.cost
+         end %>
+        <tr>
+          <td><%= total %></td>
+          <td><%=  %></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- <div class="monthly_total">
+      <%= select_tag :month, options_for_select(["None", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]) %>
+      <%= link_to "Delete Entry", total_path(:month), class: "link_to_color", method: :get %>
+    </div> -->
+
+  </div>
+</div>
